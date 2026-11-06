@@ -59,14 +59,14 @@
   // 임시 쇼릴(hero-reel.mp4) 구간표.
   // 진짜 쇼릴로 바꾸면 이 표만 실제 구간에 맞게 고친다.
   var REEL = {
-    duration: 31.7,    // 5초씩(빅터는 정면 군무 샷까지 6.7초), 겹침 없이 컷으로 넘어간다
+    duration: 31.375,  // 24fps 기준 컷 경계(튀는 컷 없이 잘라 붙임)
     segments: [
       { key: 'keyvitup-best-one',     start: 0 },
-      { key: 'limhyunsik-the-answer', start: 5 },
-      { key: 'sdf-bky-teaser',        start: 10 },
-      { key: 'hui-fan-concert-vcr',   start: 15 },
-      { key: 'victor',                start: 20 },
-      { key: 'borderless',            start: 26.7 }
+      { key: 'limhyunsik-the-answer', start: 4.792 },
+      { key: 'sdf-bky-teaser',        start: 9.667 },
+      { key: 'hui-fan-concert-vcr',   start: 14.667 },
+      { key: 'victor',                start: 19.667 },
+      { key: 'borderless',            start: 26.375 }
     ]
   };
   var heroVideo = $('#heroVideo');
