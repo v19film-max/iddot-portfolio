@@ -712,3 +712,8 @@ body::after{content:'';position:fixed;inset:-50%;z-index:400;pointer-events:none
 .hero__steps{cursor:pointer;padding:12px 0;margin-bottom:-12px;z-index:2;}
 .hero__steps span{transition:width var(--t-pop) var(--ease),background var(--t-micro) var(--ease);}
 .hero__steps:hover span:not(.is-on){background:rgba(242,241,239,.42);}
+
+/* 상세 창 Role: 작게(크레딧 줄과 같은 크기) */
+.wd__role{gap:12px;margin:clamp(18px,2vw,26px) 0 0;padding:10px 0 0;}
+.wd__role-k{font-size:10px;}
+.wd__role-v{font-size:12px;letter-spacing:.08em;}

@@ -41,7 +41,7 @@
           '<p class="wd__cat"></p>' +
           '<h2 class="wd__title" id="wdTitle"></h2>' +
           '<p class="wd__artist"></p>' +
-          '<p class="wd__role"><span class="wd__role-k">My Role</span><span class="wd__role-v"></span></p>' +
+          '<p class="wd__role"><span class="wd__role-k">Role</span><span class="wd__role-v"></span></p>' +
           '<dl class="wd__credits"></dl>' +
           '<p class="wd__note"></p>' +
           '<a class="wd__yt" target="_blank" rel="noopener noreferrer">YouTube에서 보기<span aria-hidden="true"> ↗</span></a>' +
@@ -253,7 +253,7 @@
   }
 
   // 크레딧 값: 줄바꿈(\n)은 줄을 나누고, 대표 이름(SEUNGMIN YIM / YIM SEUNGMIN)은 굵게.
-  var OWNER = /(SEUNGMIN YIM|YIM SEUNGMIN)/g;
+  var OWNER = /(SEUNG ?MIN YIM|YIM SEUNG ?MIN)/gi;
   function credHtml(text) {
     var esc = String(text).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
     return esc.replace(OWNER, '<strong>$1</strong>').replace(/\n/g, '<br>');
@@ -282,7 +282,7 @@
     elRole.querySelector('.wd__role-v').textContent = w.role || '';
     elRole.hidden = !w.role;
     (w.credits || []).forEach(function (c) { if (!c || !c[0]) return; if (c.length === 1) addSection(c[0]); else if (c[1]) addRow(c[0], c[1]); });
-    if (!elCred.children.length && IS_LOCAL) {
+    if (false) {
       // 로컬 미리보기에서만 보이는 안내. 실제 사이트에서는 빈 줄을 그냥 숨긴다.
       var hint = el('dd', 'wd__hint', '크레딧 입력 전 (works.js 의 \'' + key + '\')');
       elCred.appendChild(hint);
