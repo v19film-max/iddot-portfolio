@@ -247,10 +247,21 @@
     }
   }
 
+  // 크레딧 값: 줄바꿈(\n)은 줄을 나누고, 대표 이름(SEUNGMIN YIM / YIM SEUNGMIN)은 굵게.
+  var OWNER = /(SEUNGMIN YIM|YIM SEUNGMIN)/g;
+  function credHtml(text) {
+    var esc = String(text).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+    return esc.replace(OWNER, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  }
   function addRow(label, value) {
     if (!value) return;
     elCred.appendChild(el('dt', null, label));
-    elCred.appendChild(el('dd', null, value));
+    var dd = el('dd'); dd.innerHTML = credHtml(value);
+    elCred.appendChild(dd);
+  }
+  // 한 칸짜리 항목 ['구역 이름'] 은 구역 제목(가로 전체)으로.
+  function addSection(label) {
+    elCred.appendChild(el('dt', 'wd__sec', label));
   }
 
   function renderInfo(key) {
@@ -264,7 +275,7 @@
     elCred.innerHTML = '';
     addRow('Client', w.client);
     addRow('Role', w.role);
-    (w.credits || []).forEach(function (c) { if (c && c[0] && c[1]) addRow(c[0], c[1]); });
+    (w.credits || []).forEach(function (c) { if (!c || !c[0]) return; if (c.length === 1) addSection(c[0]); else if (c[1]) addRow(c[0], c[1]); });
     if (!elCred.children.length && IS_LOCAL) {
       // 로컬 미리보기에서만 보이는 안내. 실제 사이트에서는 빈 줄을 그냥 숨긴다.
       var hint = el('dd', 'wd__hint', '크레딧 입력 전 (works.js 의 \'' + key + '\')');
