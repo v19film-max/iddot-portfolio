@@ -168,6 +168,15 @@ uniform sampler2D tNormal;uniform sampler2D tLight;uniform float uExposure;unifo
 in vec3 vView;in vec3 vNormal;in vec2 vUv;in vec3 vObj;in float vAo;in float vMorph;in float vSector;
 out vec4 color;
 // Tangent frame from screen-space derivatives, so the mesh needs no stored tangents.
+// 크롬이 비추는 방: 위가 조금 밝은 회백색 방, 가로·세로 검은 띠, 위쪽 가는 하이라이트, 어두운 바닥 (선형 밝기)
+vec3 chromeEnv(vec3 r){
+  float v=.62+.2*r.y;
+  v*=1.-.93*smoothstep(.11,.02,abs(r.y-.16+r.x*.18));
+  v*=1.-.85*smoothstep(.13,.03,abs(r.x+.58-r.y*.2));
+  v+=2.6*smoothstep(.06,.0,abs(r.y-.56+r.x*.1))*smoothstep(.65,.15,abs(r.x-.25));
+  v*=mix(.18,1.,smoothstep(-.65,-.12,r.y));
+  return vec3(v)*vec3(.965,.975,1.);
+}
 mat3 frame(vec3 N,vec3 p,vec2 uv){
   vec3 dp1=dFdx(p),dp2=dFdy(p);vec2 du1=dFdx(uv),du2=dFdy(uv);
   vec3 a=cross(dp2,N),b=cross(N,dp1);
@@ -193,12 +202,13 @@ void main(){
   // tiny glints survive instead of being smoothed away before lighting.
   mat3 F=frame(N,vView,vUv);
   vec2 dx=dFdx(vUv),dy=dFdy(vUv);
-  vec3 lin=vec3(0.);
+  vec3 lin=vec3(0.),chr=vec3(0.);vec3 Vv=normalize(-vView);
   // TAPS: 4 on a computer; 2 on a phone (half the work per pixel; the 2× screen keeps the glints fine).
   for(int i=0;i<TAPS;i++){
     vec2 o=TAPS==2?(i==0?vec2(-.25,-.25):vec2(.25,.25)):i==0?vec2(.125,-.375):i==1?vec2(-.375,-.125):i==2?vec2(.375,.125):vec2(-.125,.375);
     vec3 n=normalize(F*(textureGrad(tNormal,vUv+dx*o.x+dy*o.y,dx*.3,dy*.3).xyz*2.-1.));
     lin+=pow(texture(tLight,vec2(.5+.495*n.x,.5-.495*n.y)).rgb,vec3(2.2));
+    if(vMorph>.001){vec3 nc=normalize(mix(F[2],n,.34));chr+=chromeEnv(reflect(-Vv,nc));}
   }
   // Crevices darken as in the render (Blender's ambient occlusion, baked per vertex), in linear light.
   // Inner sheets of the generated model show through gaps in places; Blender shows them in shadow, so here too:
@@ -214,7 +224,15 @@ void main(){
     float dist=abs(fract(ang-uGlowT+.5)-.5);
     glow=uGlowColor*uGlow*rim*(.25+smoothstep(.22,0.,dist));
   }
-  vec3 col=pow(lin/float(TAPS)*mix(.06,1.,vAo*vAo)*inside*uExposure*(1.+uLight*.3)+glow,vec3(1./2.2));
+  vec3 base=lin/float(TAPS)*mix(.06,1.,vAo*vAo)*inside*uExposure*(1.+uLight*.3);
+  if(vMorph>.001){
+    // 광택이 자리마다 조금씩 다른 때에 번져 온다
+    float sw=.5+.5*sin(vObj.x*9.+sin(vObj.y*7.)*2.+vObj.z*5.);
+    float cm=smoothstep(.15+sw*.25,.7+sw*.2,vMorph);
+    vec3 chrome=chr/float(TAPS)*mix(.35,1.,vAo)*(gl_FrontFacing?1.:.25);
+    base=mix(base,chrome,cm);
+  }
+  vec3 col=pow(base+glow,vec3(1./2.2));
   color=vec4(col,clamp(abs(-vView.z-uFocus)/uFocusRange,0.,1.));
 }`;
 

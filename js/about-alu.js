@@ -3,7 +3,7 @@
    iddot 로고(꽃잎 10장·가운데 구슬·물방울)로 굳는다. 같은 모델·같은 재질·같은 빛 계산.
    변신은 js/alu-bloom.js(원본 js/alu-sphere.js 를 복사해 변신만 덧붙임, 대기 상태 값은 그대로)가 그린다.
    그림 파일이 커서 About 근처에 왔을 때 불러온다. */
-import { mountAluSphere } from './alu-bloom.js?v=p14';
+import { mountAluSphere } from './alu-bloom.js?v=p16';
 
 const stage = document.getElementById('stage');
 const box = document.getElementById('aluBox');
