@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Contact | iddot</title>
+<meta name="description" content="iddot 프로젝트 문의.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://v19film-max.github.io/iddot-portfolio/contact.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="iddot">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="iddot | Creative Group">
+<meta property="og:description" content="Every identity starts as a dot.">
+<meta property="og:url" content="https://v19film-max.github.io/iddot-portfolio/contact.html">
+<meta property="og:image" content="https://v19film-max.github.io/iddot-portfolio/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="styles.css?v=p2">
+<script>(function(d){d.className+=' js pt-enter';setTimeout(function(){d.classList.remove('pt-enter')},1500)})(document.documentElement);</script>
+</head>
+<body data-page="contact">
+
+<header class="hd" data-top="true">
+  <a class="hd__brand" href="index.html" aria-label="iddot 홈">
+    <span class="mark" aria-hidden="true">
+      <img class="mark__dot" src="assets/mark-dot.webp" alt="" width="64" height="64">
+      <img class="mark__flower" src="assets/mark-flower.webp" alt="" width="64" height="64">
+    </span>
+    <span class="wordmark"><img src="assets/logo-nav.webp" alt="iddot" draggable="false"></span>
+  </a>
+  <nav class="hd__nav" aria-label="주 메뉴">
+    <a href="index.html#work">Work</a>
+    <a href="index.html#about">About</a>
+    <a href="contact.html" aria-current="page">Contact</a>
+  </nav>
+</header>
+
+<main id="main" class="page page--contact">
+  <p class="eyebrow reveal">Contact</p>
+  <h1 class="page-title reveal">프로젝트를 들려주세요</h1>
+  <p class="page-lead reveal">구상 단계여도 괜찮습니다. 내용을 보고 가장 좋은 방향으로 답 드리겠습니다.</p>
+
+  <section class="split reveal" aria-label="연락처와 문의 폼">
+    <dl class="contact-lines">
+      <div><dt>Email</dt><dd><a href="mailto:ceo@iddot.space">ceo@iddot.space</a></dd></div>
+      <div><dt>Mobile</dt><dd><a href="tel:+821040223465">+82 10 4022 3465</a></dd></div>
+      <div><dt>Studio</dt><dd>서울 성동구 아차산로 104<br>스탈릿 성수, 8층 813-4호</dd></div>
+    </dl>
+
+    <form id="inquiryForm" class="form glass" novalidate>
+      <span class="glass__rim" aria-hidden="true"></span>
+      <span class="glass__sheen" aria-hidden="true"></span>
+      <input type="hidden" name="_subject" value="[iddot 문의] 새 프로젝트">
+      <div class="form__row">
+        <label class="field"><span>이름 / 회사<i>*</i></span><input type="text" name="name" required autocomplete="organization" placeholder="예: 홍길동 / OO브랜드"></label>
+        <label class="field"><span>연락처<i>*</i></span><input type="text" name="contact" required placeholder="이메일 또는 전화번호"></label>
+      </div>
+      <div class="form__row">
+        <label class="field"><span>프로젝트 유형</span>
+          <select name="type">
+            <option value="">선택해주세요</option>
+            <option>뮤직비디오</option><option>퍼포먼스 · 댄스 필름</option><option>시네마틱 · 아트 필름</option>
+            <option>브랜드 · 바이럴 콘텐츠</option><option>유튜브 · 디지털 콘텐츠</option><option>무대 · 전시 미술 세트</option><option>기타</option>
+          </select>
+        </label>
+        <label class="field"><span>예상 일정</span><input type="text" name="schedule" placeholder="예: 3월 중 촬영"></label>
+      </div>
+      <label class="field"><span>내용<i>*</i></span><textarea name="message" required placeholder="구상하신 작업을 편하게 적어주세요."></textarea></label>
+      <div class="form__bottom">
+        <p class="form__status" id="inquiryStatus" aria-live="polite"></p>
+        <button class="btn btn--glass" type="submit" id="inquirySubmit"><span class="btn__rim" aria-hidden="true"></span><span class="btn__label">보내기</span></button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-dither" aria-hidden="true"><canvas id="footerDither"></canvas></div>
+  <div class="site-footer__logo" aria-label="iddot">
+    <img src="assets/logo-footer.webp" alt="iddot" loading="lazy" decoding="async">
+  </div>
+  <div class="site-footer__info">
+    <p>Every identity starts as a dot</p>
+    <p><a href="mailto:ceo@iddot.space">ceo@iddot.space</a><br><a href="tel:+821040223465">+82 10 4022 3465</a></p>
+    <p>서울 성동구 아차산로 104<br>스탈릿 성수, 8층 813-4호</p>
+    <p>Copyright ⓒ 2026 iddot. 브이나인틴필름<br>대표 임승민&nbsp;&nbsp;사업자 등록번호 141-16-01636</p>
+  </div>
+</footer>
+
+<script src="app.js?v=r7"></script>
+<script src="dither.js?v=r1"></script>
+</body>
+</html>

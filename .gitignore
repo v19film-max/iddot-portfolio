@@ -1,0 +1,19 @@
+.DS_Store
+
+# 원본 대용량 영상(100MB 초과 가능) — 사이트에는 *-preview.mp4만 올린다
+assets/borderless.mp4
+assets/hui-fan-concert-vcr.mp4
+assets/keyvitup-best-one.mp4
+assets/limhyunsik-the-answer.mp4
+
+# 시안 검증용 테스트 틀 (커밋 금지)
+_frame.html
+_probe.html
+_probe2.html
+
+# 포트폴리오 사이트: 내부 문서·기존 도메인 설정은 올리지 않는다
+AGENTS.md
+CLAUDE.md
+HANDOFF.md
+CNAME
+3d/

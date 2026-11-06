@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://v19film-max.github.io/iddot-portfolio/sitemap.xml
