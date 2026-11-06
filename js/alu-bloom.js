@@ -1,6 +1,4 @@
-// 알루 금속 구 + 꽃 변신 — js/alu-sphere.js(알루 앱 대기 상태 그대로)를 복사해 "꽃 변신"만 덧붙인 파일.
-// 대기 상태 값은 원본과 한 글자도 다르지 않다. 변신(uMorph)이 꺼져 있으면 원본과 똑같이 그려진다.
-// 필요한 것: ogl@1.0.11, 웹지엘2.
+// 알루 금속 구 (대기 상태) — 알루 앱 alu-v2/MetalCrystal.tsx 에서 그대로 떼어 낸 독립 모듈. 필요한 것: ogl@1.0.11, 웹지엘2.
 import { Renderer, Camera, Transform, Program, Mesh, Geometry, RenderTarget, Texture, Triangle } from 'ogl';
 
 const noise = `
@@ -19,8 +17,7 @@ uniform float uSquash;uniform float uPivot;uniform vec3 uOffset;uniform vec4 uBu
 uniform float uDroop;uniform vec4 uDent;uniform float uRipple;uniform float uRippleT;
 uniform float uWander;uniform float uWanderT;uniform float uBloom;
 uniform vec4 uShape;uniform vec2 uEars;uniform float uEarTilt;uniform float uWobble;uniform float uWobbleT;
-uniform float uMorph;uniform float uMT;uniform float uMA;uniform float uMB;uniform vec4 uPet[10];uniform vec4 uDrp[10];
-out vec3 vView;out vec3 vNormal;out vec2 vUv;out vec3 vObj;out float vAo;out float vMorph;out float vSector;
+out vec3 vView;out vec3 vNormal;out vec2 vUv;out vec3 vObj;out float vAo;
 ${noise}
 float lobe(vec3 d,vec4 b,float width){return b.w*smoothstep(width,1.,dot(d,b.xyz));}
 // Shapes it can turn into, as a radius for each direction (world frame, facing the viewer). Corners are rounded by a
@@ -46,42 +43,8 @@ float ear(vec3 d,vec3 E,float wide,float thin){
   float u=dot(d,side),v=dot(d,fwd);
   return dot(d,E)>0.?exp(-u*u/wide-v*v/thin):0.;
 }
-
-// ── 꽃 변신 (iddot 로고) ──────────────────────────────────────────────────────────────
-// 감쇠 스프링의 계단 응답: 출발이 늦고, 가속하고, 살짝 넘쳤다가 출렁이며 자리 잡는다.
-float springStep(float t,float w0,float z){if(t<=0.)return 0.;float wd=w0*sqrt(1.-z*z);return 1.-exp(-z*w0*t)*(cos(wd*t)+z*w0/wd*sin(wd*t));}
-float springVel(float t,float w0,float z){if(t<=0.)return 0.;float wd=w0*sqrt(1.-z*z);return exp(-z*w0*t)*sin(wd*t);}
-float angDiff(float a,float b){float d=a-b;return d-6.28318*floor((d+3.14159)/6.28318);}
-// 구의 한 점(화면 기준 방향 d)이 꽃의 어디로 가는지: 가운데 구슬 / 꽃잎 / 물방울. nT = 그 자리의 면 방향.
-vec3 flowerTarget(vec3 d,float twist,out vec3 nT,out float part,out float rx,out float sec){
-  float phi=atan(d.y,d.x),rxy=length(d.xy),sz=d.z>=0.?1.:-1.;rx=rxy;
-  const float RB=.142,CAP=.30;
-  if(rxy<CAP){
-    float th=rxy/CAP*1.5708;vec3 bd=vec3(cos(phi)*sin(th),sin(phi)*sin(th),sz*cos(th));
-    nT=bd;part=0.;sec=100.;return bd*RB;
-  }
-  int k=0;float best=9.;
-  for(int i=0;i<10;i++){float a=abs(angDiff(phi,uPet[i].x));if(a<best){best=a;k=i;}}
-  vec4 P=uPet[k];
-  float sd=angDiff(phi,P.x),gap=3.14159;
-  for(int i=0;i<10;i++){if(i==k)continue;float t=angDiff(uPet[i].x,P.x);if(t*sd>0.&&abs(t)<gap)gap=abs(t);}
-  float u=clamp(sd/(gap*.5),-1.,1.);
-  float ang=P.x+twist;
-  vec3 dir=vec3(cos(ang),sin(ang),0.),side=vec3(-dir.y,dir.x,0.),Z=vec3(0.,0.,1.);
-  float cut=P.w>0.?.84:1.;sec=float(k);
-  if(rxy<cut){
-    float a=clamp((rxy-CAP)/(cut-CAP),0.,1.),prof=pow(sin(3.14159*a),.7);
-    float lat=u*P.z*prof,th=sz*P.z*.55*prof*sqrt(max(0.,1.-u*u));
-    nT=normalize(Z*sz+side*u*.9-dir*cos(3.14159*a)*.35);part=1.;
-    return dir*(RB*.85+a*P.y)+side*lat+Z*th;
-  }
-  vec4 D=uDrp[k];
-  float b=clamp((rxy-cut)/(1.-cut),0.,1.),th=b*3.14159;
-  vec3 bd=normalize(-dir*cos(th)+(side*u+Z*sz*sqrt(max(0.,1.-u*u)))*sin(th));
-  nT=bd;part=2.;if(P.w<1.5)sec=200.+float(k);return dir*D.x+bd*D.y;
-}
 void main(){
-  vUv=uv;vObj=position.xyz;vAo=position.w;vMorph=0.;vSector=0.;
+  vUv=uv;vObj=position.xyz;vAo=position.w;
   // The render's flow: a cloud texture (scale 0.55, three octaves) read relative to a point circling the body,
   // pushing the surface along its normal. The body already carries the render's own swell at its first frame
   // (baked from Blender), so only the change since then is added: at rest it is exactly the render.
@@ -131,29 +94,6 @@ void main(){
   w-=d*R*(uDent.w*exp(-a*a*9.)+uRipple*sin(a*9.-uRippleT*14.)*exp(-a*1.2)*smoothstep(0.,.25,uRippleT)*exp(-uRippleT*1.6));
   // Drooping (gloomy): the top settles and the bottom spreads.
   w.y-=uDroop*.07*(w.y+R);w.xz*=1.+uDroop*.035*(1.-w.y/R);
-  // 꽃 변신: 각 점이 스프링 물리로 제 자리(꽃잎·구슬·물방울)까지 흘러간다. 가운데부터 바깥으로 시간차를 두고,
-  // 펼쳐지는 동안 소용돌이처럼 감겼다 풀리며, 빠르게 움직이는 동안엔 표면이 액체처럼 일렁인다.
-  if(uMorph>.5){
-    float h=hash(d*37.1+3.7);
-    float opening=uMB>uMA?1.:0.;
-    float rr=length(d.xy);
-    float del=opening>.5?.03+rr*.34+h*.08:.03+(1.-rr)*.22+h*.06;
-    vec3 nT;float part,rx,sec;
-    float w0=10.,z=.42;
-    float sm0=springStep(uMT-del,w0,z);
-    float twist=(1.-sm0)*.55*(.4+rr)*(opening>.5?1.:-1.);
-    vec3 tg=flowerTarget(d,twist,nT,part,rx,sec);
-    if(part>1.5){w0=7.;z=.33;del+=opening>.5?.14:0.;}
-    float sm=springStep(uMT-del,w0,z),vel=springVel(uMT-del,w0,z);
-    float m=uMA+(uMB-uMA)*sm;
-    m=opening>.5?m:max(m,-.03);   // 접힐 때 반동이 구보다 커지지 않게
-    // 흐르는 동안의 일렁임 + 무게(빨리 움직이는 부분이 살짝 처진다)
-    tg+=nT*(vnoise(d*4.+vec3(uMT*1.7))-.5)*.09*abs(vel);
-    tg.y-=.035*vel*(opening>.5?1.:-1.);
-    w=mix(w,tg,m);R=length(w);
-    nW=normalize(mix(nW,nT,clamp(m,0.,1.)));
-    vMorph=m;vSector=sec;
-  }
   // Squash and stretch about the pivot, keeping the volume.
   w.y=uPivot+(w.y-uPivot)*uSquash;w.xz/=sqrt(uSquash);
   w+=uOffset;
@@ -165,18 +105,9 @@ void main(){
 const bodyFragment = `#version 300 es
 precision highp float;
 uniform sampler2D tNormal;uniform sampler2D tLight;uniform float uExposure;uniform vec3 uGlowColor;uniform float uGlow;uniform float uGlowT;uniform vec2 uCenter;uniform float uLight;uniform float uFocus;uniform float uFocusRange;
-in vec3 vView;in vec3 vNormal;in vec2 vUv;in vec3 vObj;in float vAo;in float vMorph;in float vSector;
+in vec3 vView;in vec3 vNormal;in vec2 vUv;in vec3 vObj;in float vAo;
 out vec4 color;
 // Tangent frame from screen-space derivatives, so the mesh needs no stored tangents.
-// 크롬이 비추는 방: 위가 조금 밝은 회백색 방, 가로·세로 검은 띠, 위쪽 가는 하이라이트, 어두운 바닥 (선형 밝기)
-vec3 chromeEnv(vec3 r){
-  float v=.62+.2*r.y;
-  v*=1.-.93*smoothstep(.11,.02,abs(r.y-.16+r.x*.18));
-  v*=1.-.85*smoothstep(.13,.03,abs(r.x+.58-r.y*.2));
-  v+=2.6*smoothstep(.06,.0,abs(r.y-.56+r.x*.1))*smoothstep(.65,.15,abs(r.x-.25));
-  v*=mix(.18,1.,smoothstep(-.65,-.12,r.y));
-  return vec3(v)*vec3(.965,.975,1.);
-}
 mat3 frame(vec3 N,vec3 p,vec2 uv){
   vec3 dp1=dFdx(p),dp2=dFdy(p);vec2 du1=dFdx(uv),du2=dFdy(uv);
   vec3 a=cross(dp2,N),b=cross(N,dp1);
@@ -185,12 +116,6 @@ mat3 frame(vec3 N,vec3 p,vec2 uv){
   return mat3(T*s,B*s,N);
 }
 void main(){
-  // 변신 중 실처럼 늘어난 면(꽃잎 사이·물방울 목)은 일정 이상 가늘어지면 끊어진다.
-  if(vMorph>.04){
-    float tear=fract(sin(dot(floor(vObj*40.),vec3(12.9898,78.233,37.719)))*43758.5453);
-    if(fwidth(vSector)>.001&&vMorph>.22+tear*.38)discard;
-    float sa=length(dFdx(vView))+length(dFdy(vView)),sb=length(dFdx(vObj))+length(dFdy(vObj));if(sa>sb*mix(30.,9.,clamp(vMorph,0.,1.)))discard;
-  }
   vec3 N=normalize(vNormal);if(!gl_FrontFacing)N=-N;
   #ifdef SHOW_BACK
   if(!gl_FrontFacing){color=vec4(1.,0.,0.,0.);return;}
@@ -202,13 +127,12 @@ void main(){
   // tiny glints survive instead of being smoothed away before lighting.
   mat3 F=frame(N,vView,vUv);
   vec2 dx=dFdx(vUv),dy=dFdy(vUv);
-  vec3 lin=vec3(0.),chr=vec3(0.);vec3 Vv=normalize(-vView);
+  vec3 lin=vec3(0.);
   // TAPS: 4 on a computer; 2 on a phone (half the work per pixel; the 2× screen keeps the glints fine).
   for(int i=0;i<TAPS;i++){
     vec2 o=TAPS==2?(i==0?vec2(-.25,-.25):vec2(.25,.25)):i==0?vec2(.125,-.375):i==1?vec2(-.375,-.125):i==2?vec2(.375,.125):vec2(-.125,.375);
     vec3 n=normalize(F*(textureGrad(tNormal,vUv+dx*o.x+dy*o.y,dx*.3,dy*.3).xyz*2.-1.));
     lin+=pow(texture(tLight,vec2(.5+.495*n.x,.5-.495*n.y)).rgb,vec3(2.2));
-    if(vMorph>.001){vec3 nc=normalize(mix(F[2],n,.34));chr+=chromeEnv(reflect(-Vv,nc));}
   }
   // Crevices darken as in the render (Blender's ambient occlusion, baked per vertex), in linear light.
   // Inner sheets of the generated model show through gaps in places; Blender shows them in shadow, so here too:
@@ -224,15 +148,7 @@ void main(){
     float dist=abs(fract(ang-uGlowT+.5)-.5);
     glow=uGlowColor*uGlow*rim*(.25+smoothstep(.22,0.,dist));
   }
-  vec3 base=lin/float(TAPS)*mix(.06,1.,vAo*vAo)*inside*uExposure*(1.+uLight*.3);
-  if(vMorph>.001){
-    // 광택이 자리마다 조금씩 다른 때에 번져 온다
-    float sw=.5+.5*sin(vObj.x*9.+sin(vObj.y*7.)*2.+vObj.z*5.);
-    float cm=smoothstep(.15+sw*.25,.7+sw*.2,vMorph);
-    vec3 chrome=chr/float(TAPS)*mix(.35,1.,vAo)*(gl_FrontFacing?1.:.25);
-    base=mix(base,chrome,cm);
-  }
-  vec3 col=pow(base+glow,vec3(1./2.2));
+  vec3 col=pow(lin/float(TAPS)*mix(.06,1.,vAo*vAo)*inside*uExposure*(1.+uLight*.3)+glow,vec3(1./2.2));
   color=vec4(col,clamp(abs(-vView.z-uFocus)/uFocusRange,0.,1.));
 }`;
 
@@ -286,14 +202,6 @@ void main(){
 // 값은 앱과 한 글자도 다르지 않게 옮겼다 — 숫자를 바꾸면 앱과 달라진다.
 // ---------------------------------------------------------------------------------------------------------------
 const BU = .896, SIZE = 1.898;
-// iddot 로고(symbol_final.png, 1440px)에서 잰 꽃잎: [각도°, 중심→끝 px, 반폭 px, 물방울(0 없음·1 떨어짐·2 붙음), 물방울 중심 px, 물방울 반지름 px]
-const PETALS = [[90.9, 412, 40, 1, 474, 30], [54.3, 403, 33, 1, 471, 32], [24.3, 455, 45, 0, 0, 0], [-14.6, 449, 42, 1, 505, 30], [-50, 389, 38, 2, 425, 34],
-  [-91, 458, 42, 0, 0, 0], [-135, 458, 45, 0, 0, 0], [-165.3, 462, 40, 1, 531, 32], [161.5, 416, 40, 2, 450, 36], [131, 487, 46, 0, 0, 0]];
-const FS = .00195;   // 로고 px → 장면 단위 (펼친 꽃이 화면 안에 들어오는 크기)
-const RB_PX = .142 / FS;
-const PET = PETALS.flatMap(([a, len, hw, dr]) => [a * Math.PI / 180, (len - RB_PX * .85) * FS, hw * FS, dr]);
-const DRP = PETALS.flatMap(([, , , , dd, dr]) => [dd * FS, dr * FS, 0, 0]);
-const stepJS = (t, w0, z) => { if (t <= 0) return 0; const wd = w0 * Math.sqrt(1 - z * z); return 1 - Math.exp(-z * w0 * t) * (Math.cos(wd * t) + z * w0 / wd * Math.sin(wd * t)); };
 const FLOW = .08 * SIZE / BU, FLOW_SCALE = .55 / BU, VIEW_HALF = 1.2 * SIZE / 2 / BU;
 const SPIN_IDLE = .18;
 const DOZE_AFTER = 25;
@@ -327,6 +235,7 @@ function loadImage(src) {
  *   doze: 25초 지나면 꾸벅꾸벅 조는 동작(앱과 같음, 기본 true)
  *   maxFps: 초당 장수 제한(0 = 제한 없음, 앱 대기 상태와 같음)
  */
+// js/alu-sphere.js 원본에 '제자리 서기'(rest)만 덧붙인 판. 대기 상태의 숫자·모습은 원본과 같다. scratchpad/make-hold.py로 생성.
 export function mountAluSphere(el, opts = {}) {
   const base = (opts.assets ?? new URL('./assets/', import.meta.url).href).replace(/\/?$/, '/');
   const interactive = opts.interactive ?? true, doze = opts.doze ?? true, maxFps = opts.maxFps ?? 0;
@@ -349,8 +258,8 @@ export function mountAluSphere(el, opts = {}) {
     squash: new Spring(70, 12, 1), lean: new Spring(22, 7), droop: new Spring(8, 5), wobble: new Spring(30, 7),
     dent: new Spring(150, 5), shake: new Spring(260, 9), pitch: new Spring(5, 3.4), born: new Spring(12, 4.2),
   };
+  let rest = 0, restOn = false, restSpin = 0, restFlow = 0, restCb = null;   // 제자리 서기(영상으로 넘어가기 직전)
   let wobbleT = 0, lastActive = 0, nodAt = 0, nodPhase = 0, rippleT = 9, dentDir = [0, 0, 1];
-  const morph = { on: false, t: 0, A: 0, B: 0 };   // 꽃 변신 상태
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const samples = Math.min(2, g2.getParameter(g2.MAX_SAMPLES));
@@ -389,7 +298,6 @@ export function mountAluSphere(el, opts = {}) {
           uSquash: { value: 1 }, uPivot: { value: 0 }, uOffset: { value: [0, 0, 0] }, uBulgeA: { value: [0, .15, .99, 0] }, uBulgeB: { value: [-.75, -.1, .65, 0] },
           uDroop: { value: 0 }, uDent: { value: [0, 0, 1, 0] }, uRipple: { value: 0 }, uRippleT: { value: 9 }, uWander: { value: 0 }, uWanderT: { value: 0 }, uBloom: { value: 0 },
           uShape: { value: [0, 0, 0, 0] }, uEars: { value: [0, 0] }, uEarTilt: { value: 0 }, uGlowColor: { value: [1, 1, 1] }, uGlow: { value: 0 }, uGlowT: { value: 0 }, uCenter: { value: [0, 0] }, uWobble: { value: 0 }, uWobbleT: { value: 0 },
-          uMorph: { value: 0 }, uMT: { value: 0 }, uMA: { value: 0 }, uMB: { value: 0 }, uPet: { value: PET }, uDrp: { value: DRP },
         },
       });
       body = new Mesh(gl, {
@@ -434,7 +342,9 @@ export function mountAluSphere(el, opts = {}) {
     const gap = last ? now - last : 0;
     const dt = last ? Math.min(gap / 1000, .05) : 0; last = now;
     const still = reduced.matches;
-    if (!still) { time += dt; grainT = time * 9; flowPhase += dt * .3; }
+    if (!still) { time += dt; grainT = time * 9; flowPhase += restOn ? 0 : dt * .3; }
+    rest += ((restOn ? 1 : 0) - rest) * (still ? 1 : Math.min(1, dt * 13));
+    if (restOn) { flowPhase += (restFlow - flowPhase) * (still ? 1 : Math.min(1, dt * 13)); if (Math.abs(restFlow - flowPhase) < .002) flowPhase = restFlow; lastActive = time; }
     const fa = bodyProgram.uniforms.uFlowAt.value; fa[0] = .35 / BU * Math.cos(flowPhase); fa[1] = .2 / BU * Math.sin(2 * flowPhase); fa[2] = .35 / BU * Math.sin(flowPhase);
     const dozing = doze && time - lastActive > DOZE_AFTER;
     // 숨쉬기: 들숨이 조금 길게.
@@ -460,28 +370,24 @@ export function mountAluSphere(el, opts = {}) {
     sp.dent.step(0, dt); rippleT += dt;
     // 회전: 조금 빨라졌다 느려졌다 하며 계속 돈다.
     const drift = 1 + .3 * Math.sin(time * .13) + .15 * Math.sin(time * .37 + 1);
-    const spinTarget = morph.on ? 0 : SPIN_IDLE * drift;
+    const spinTarget = SPIN_IDLE * drift;
     const held = grab?.moved;
-    if (!held) spinVel += (spinTarget - spinVel) * Math.min(1, dt * (morph.on ? 7 : Math.abs(spinTarget) > Math.abs(spinVel) ? 1.6 : .6));
+    if (!held) spinVel += (spinTarget - spinVel) * Math.min(1, dt * (Math.abs(spinTarget) > Math.abs(spinVel) ? 1.6 : .6));
     if (!still && !held) spin += dt * spinVel;
+    if (restOn) { spin += (restSpin - spin) * (still ? 1 : Math.min(1, dt * 13)); if (Math.abs(restSpin - spin) < .002) spin = restSpin; spinVel = 0; }
     turn.rotation.y = spin - iw * 2.4;
     if (!grab?.moved) sp.pitch.step(Math.round(sp.pitch.x / (Math.PI * 2)) * Math.PI * 2, dt);
     scene.rotation.x = sp.pitch.x;
-    tilt.rotation.x = (still ? 0 : Math.sin(time * .16 + 1) * .04) + sp.lean.x;
+    tilt.rotation.x = ((still ? 0 : Math.sin(time * .16 + 1) * .04) + sp.lean.x) * (1 - rest);
     tilt.rotation.z = sp.shake.x * .02;
     scene.scale.set(Math.max(.001, sp.born.x));
     const u = bodyProgram.uniforms, off = u.uOffset.value;
     if (still) { u.uSquash.value = 1; off[1] = 0; }
-    else { u.uSquash.value = sp.squash.x; off[1] = .012 * Math.sin(time * .7) + .006 * Math.sin(time * 1.3 + 2); }
+    else { u.uSquash.value = 1 + (sp.squash.x - 1) * (1 - rest); off[1] = (.012 * Math.sin(time * .7) + .006 * Math.sin(time * 1.3 + 2)) * (1 - rest); }
     u.uPivot.value = -.95;
     u.uDroop.value = sp.droop.x; u.uWanderT.value = time;
-    const dn = u.uDent.value; dn[0] = dentDir[0]; dn[1] = dentDir[1]; dn[2] = dentDir[2]; dn[3] = sp.dent.x; u.uRipple.value = Math.min(.06, Math.abs(sp.dent.v) * .012 + .04 * Math.exp(-rippleT)); u.uRippleT.value = rippleT;
+    const dn = u.uDent.value; dn[0] = dentDir[0]; dn[1] = dentDir[1]; dn[2] = dentDir[2]; dn[3] = sp.dent.x * (1 - rest); u.uRipple.value = Math.min(.06, Math.abs(sp.dent.v) * .012 + .04 * Math.exp(-rippleT)) * (1 - rest); u.uRippleT.value = rippleT;
     u.uWobble.value = still ? 0 : sp.wobble.x; u.uWobbleT.value = wobbleT;
-    if (morph.on) {
-      if (!morph.hold) morph.t += still ? 9 : Math.min(gap / 1000, .25);   // 느린 기기에서도 실제 시간대로
-      if (morph.B === 0 && morph.t > 3.2) morph.on = false;   // 다 접혔으면 원래 알루 구로
-    }
-    u.uMorph.value = morph.on ? 1 : 0; u.uMT.value = morph.t; u.uMA.value = morph.A; u.uMB.value = morph.B;
     renderer.render({ scene, camera, target: msaa });
     g2.bindFramebuffer(g2.READ_FRAMEBUFFER, msaaBuffer);
     g2.bindFramebuffer(g2.DRAW_FRAMEBUFFER, sceneTarget.buffer);
@@ -492,7 +398,8 @@ export function mountAluSphere(el, opts = {}) {
     grainProgram.uniforms.tImage.value = lensA.texture; grainProgram.uniforms.uGrainT.value = grainT;
     renderer.render({ scene: grainMesh });
     [lensA, lensB] = [lensB, lensA];
-    if (!still) raf = requestAnimationFrame(frame);
+    if (restCb && rest > .985 && Math.abs(spin - restSpin) < .004 && Math.abs(flowPhase - restFlow) < .004) { const cb = restCb; restCb = null; cb(); }
+    if (!still || restCb) raf = requestAnimationFrame(frame);
   };
   const wake = () => { if (!raf && alive && !document.hidden) { last = 0; raf = requestAnimationFrame(frame); } };
   const onVisibility = () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; } else wake(); };
@@ -540,13 +447,14 @@ export function mountAluSphere(el, opts = {}) {
     g2.deleteFramebuffer(msaaBuffer); g2.deleteRenderbuffer(msaaColor); g2.deleteRenderbuffer(msaaDepth);
     gl.getExtension('WEBGL_lose_context')?.loseContext(); canvas.remove();
   };
-  // 꽃으로 펼치기(true) / 다시 구로(false). 도중에 바꾸면 지금 모양에서 이어서 움직인다.
-  destroy.bloom = (open) => {
-    const cur = morph.on ? morph.A + (morph.B - morph.A) * stepJS(morph.t - .2, 10, .42) : 0;
-    morph.A = Math.max(0, Math.min(1, cur)); morph.B = open ? 1 : 0; morph.t = 0; morph.on = true; morph.hold = false;
-    lastActive = time; wake();
-  };
-  // 검증용: 변신을 특정 시각(초)에 멈춰 보여 준다
-  destroy.seek = (t, open = true) => { morph.on = true; morph.hold = true; morph.A = open ? 0 : 1; morph.B = open ? 1 : 0; morph.t = t; wake(); };
+  // 제자리 서기: 원래 렌더 자세로 모이면 약속이 풀린다(영상 첫 장면과 같은 모습).
+  destroy.rest = (on) => new Promise((res) => {
+    restOn = on;
+    if (on) {
+      const T = Math.PI * 2;
+      restSpin = Math.round(spin / T) * T; restFlow = Math.round(flowPhase / T) * T; grab = null;
+      restCb = res; wake(); if (!body) { restCb = null; res(); }
+    } else { restCb = null; wake(); res(); }
+  });
   return destroy;
 }
