@@ -59,14 +59,14 @@
   // 임시 쇼릴(hero-reel.mp4) 구간표.
   // 진짜 쇼릴로 바꾸면 이 표만 실제 구간에 맞게 고친다.
   var REEL = {
-    duration: 31.375,  // 24fps 기준 컷 경계(튀는 컷 없이 잘라 붙임)
+    duration: 31.0,    // 24fps 기준 컷 경계(튀는 컷 없이 잘라 붙임)
     segments: [
       { key: 'keyvitup-best-one',     start: 0 },
       { key: 'limhyunsik-the-answer', start: 4.792 },
       { key: 'sdf-bky-teaser',        start: 9.667 },
       { key: 'hui-fan-concert-vcr',   start: 14.667 },
-      { key: 'victor',                start: 19.667 },
-      { key: 'borderless',            start: 26.375 }
+      { key: 'victor',                start: 19.292 },
+      { key: 'borderless',            start: 26.0 }
     ]
   };
   var heroVideo = $('#heroVideo');
