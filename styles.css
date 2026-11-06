@@ -637,3 +637,11 @@ body::after{content:'';position:fixed;inset:-50%;z-index:400;pointer-events:none
   .ab .stage{width:min(100%,520px);margin:0 auto;}
 }
 .stage__fallback{mix-blend-mode:screen;}
+
+/* ═══ 홈 한 페이지: 팀 · 문의 구역 ═══ */
+.home-sec{max-width:var(--max);margin:0 auto;padding:0 var(--pad);scroll-margin-top:var(--hd);}
+#team{padding-bottom:clamp(40px,6vw,80px);}
+#team .split{margin-top:0;}
+#contact{padding-top:clamp(80px,10vw,140px);padding-bottom:clamp(100px,11vw,170px);}
+#contact .page-title{margin-top:10px;}
+#contact{overflow-x:clip;}

@@ -391,7 +391,7 @@
   }
 
   /* ── 5b. 일반 페이지 등장 효과 (About · Contact) ── */
-  var pageReveals = $$('.page .reveal');
+  var pageReveals = $$('.page .reveal, .home-sec .reveal');
   if (pageReveals.length) {
     if ('IntersectionObserver' in window && !reduceMotion) {
       pageReveals.forEach(function (el, i) { if (i < 4) el.style.transitionDelay = i * 80 + 'ms'; });
