@@ -258,7 +258,7 @@ export function mountAluSphere(el, opts = {}) {
     squash: new Spring(70, 12, 1), lean: new Spring(22, 7), droop: new Spring(8, 5), wobble: new Spring(30, 7),
     dent: new Spring(150, 5), shake: new Spring(260, 9), pitch: new Spring(5, 3.4), born: new Spring(12, 4.2),
   };
-  let rest = 0, restOn = false, restSpin = 0, restFlow = 0, restCb = null;   // 제자리 서기(영상으로 넘어가기 직전)
+  let rest = 0, restOn = false, restSpin = 0, restFlow = 0, restCb = null, paused = false;   // 제자리 서기(영상으로 넘어가기 직전)·멈춤(영상이 덮는 동안)
   let wobbleT = 0, lastActive = 0, nodAt = 0, nodPhase = 0, rippleT = 9, dentDir = [0, 0, 1];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -337,7 +337,7 @@ export function mountAluSphere(el, opts = {}) {
   const ro = new ResizeObserver(resize); ro.observe(el);
 
   const frame = (now) => {
-    raf = 0; if (!alive || document.hidden || !body || !bodyProgram) return;
+    raf = 0; if (!alive || document.hidden || !body || !bodyProgram || paused) return;
     if (maxFps && last && now - last < 1000 / maxFps - 2) { raf = requestAnimationFrame(frame); return; }
     const gap = last ? now - last : 0;
     const dt = last ? Math.min(gap / 1000, .05) : 0; last = now;
@@ -456,5 +456,7 @@ export function mountAluSphere(el, opts = {}) {
       restCb = res; wake(); if (!body) { restCb = null; res(); }
     } else { restCb = null; wake(); res(); }
   });
+  // 영상이 알루를 완전히 덮는 동안은 그리기를 멈춘다(영상 재생이 끊기지 않게).
+  destroy.pause = (v) => { paused = v; if (!v) wake(); };
   return destroy;
 }
