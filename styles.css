@@ -645,3 +645,29 @@ body::after{content:'';position:fixed;inset:-50%;z-index:400;pointer-events:none
 #contact{padding-top:clamp(80px,10vw,140px);padding-bottom:clamp(100px,11vw,170px);}
 #contact .page-title{margin-top:10px;}
 #contact{overflow-x:clip;}
+
+/* ═══ About 왼쪽: 알루 금속 구 (배경은 반드시 #000, 이음새 방지) ═══ */
+.ab{position:relative;isolation:isolate;}
+.ab::before{content:'';position:absolute;z-index:-1;top:-12%;bottom:-6%;left:calc(50% - 50vw);right:calc(50% - 50vw);background:#000;pointer-events:none;
+  -webkit-mask:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent);}
+.ab .stage{background:#000;overflow:hidden;}
+.ab .stage::before{display:none;}
+.stage__alu{position:absolute;inset:0;opacity:0;transform:scale(.96);
+  transition:opacity 900ms var(--ease),transform 1100ms var(--spring),filter 700ms var(--ease);}
+.stage.is-ready .stage__alu{opacity:1;transform:none;}
+.stage.is-open .stage__alu{opacity:0;transform:scale(.35);filter:blur(6px);pointer-events:none;transition-duration:520ms,620ms,520ms;}
+.stage__still{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;}
+.stage.is-fallback .stage__still{display:block;}
+.stage.is-fallback.is-open .stage__still{opacity:0;transition:opacity 400ms var(--ease);}
+.stage__flower{position:absolute;inset:7%;padding:0;border:0;background:none;cursor:pointer;opacity:0;pointer-events:none;
+  transform:scale(.18) rotate(-70deg);transition:opacity 380ms var(--ease),transform 600ms var(--ease-exit);}
+.stage__flower img{width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;}
+.stage.is-open .stage__flower{opacity:1;pointer-events:auto;transform:none;
+  transition:opacity 500ms var(--ease) 120ms,transform 1300ms cubic-bezier(.22,1.25,.36,1) 80ms;}
+.stage__open{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);z-index:2;appearance:none;border:0;background:none;cursor:pointer;padding:10px 8px;
+  font:700 11px/1 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--sub);
+  opacity:0;transition:opacity var(--t-pop) var(--ease),color var(--t-micro) var(--ease);}
+.stage.is-ready .stage__open,.stage.is-fallback .stage__open{opacity:1;animation:hintPulse 2.6s var(--ease) infinite;}
+.stage.is-open .stage__open{animation:none;opacity:.75;}
+.stage__open:hover{color:var(--fg);}
+@media (prefers-reduced-motion:reduce){.stage__alu,.stage__flower{transition:opacity 300ms linear !important;transform:none !important;filter:none !important;}.stage__open{animation:none !important;}}

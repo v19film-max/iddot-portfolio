@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=p3">
+<link rel="stylesheet" href="styles.css?v=p4">
 <script>(function(d){d.className+=' js pt-enter';setTimeout(function(){d.classList.remove('pt-enter')},1500)})(document.documentElement);</script>
 </head>
 <body data-page="home">
@@ -80,10 +80,10 @@
   <!-- About: 왼쪽 3D 로고(점 → 꽃, bloom.js), 오른쪽 소개글 -->
   <section class="ab home-sec" id="about" aria-labelledby="abTitle">
     <div class="stage" id="stage">
-      <canvas class="stage__canvas" id="stageCanvas" aria-hidden="true"></canvas>
-      <img class="stage__fallback" src="assets/symbol_final.png" alt="" aria-hidden="true" loading="lazy">
-      <button class="stage__hit" id="stageHit" type="button" aria-pressed="false" aria-label="로고 펼치기"></button>
-      <p class="stage__hint"><span>Tap the dot</span></p>
+      <div class="stage__alu" id="aluBox"></div>
+      <img class="stage__still" src="assets/alu/alu-still.webp" alt="" aria-hidden="true" loading="lazy">
+      <button class="stage__flower" id="stageFlower" type="button" tabindex="-1" aria-label="로고 접기"><img src="assets/symbol-flower.webp" alt="" loading="lazy"></button>
+      <button class="stage__open" id="stageOpen" type="button" aria-pressed="false">Tap the dot</button>
     </div>
     <div class="ab__body">
       <p class="ab__label" id="abTitle">About</p>
@@ -184,7 +184,7 @@
 <script src="app.js?v=p3"></script>
 <script src="work-detail.js?v=r2"></script>
 <script src="dither.js?v=r1"></script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="bloom.js?v=p2"></script>
+<script type="importmap">{"imports":{"ogl":"./vendor/ogl/index.js"}}</script>
+<script type="module" src="js/about-alu.js?v=p4"></script>
 </body>
 </html>
