@@ -173,7 +173,10 @@
     v.addEventListener('loadeddata', function () { player.classList.add('is-ready'); });
     player.appendChild(v);
     var p = v.play();
-    if (p && p.catch) p.catch(function () { /* 자동재생이 막히면 컨트롤/포스터로 남는다 */ });
+    if (p && p.catch) p.catch(function () {
+      // 소리 있는 자동재생이 막힌 브라우저: 소리 끈 채 재생하고, 컨트롤의 소리 버튼으로 켤 수 있게 둔다
+      if (!(opts && opts.ambient)) { v.muted = true; var q = v.play(); if (q && q.catch) q.catch(function () {}); }
+    });
   }
 
   // 사이트 안에서 재생할 수 없는 유튜브 영상: 미리보기(또는 썸네일) + 유튜브로 가는 버튼

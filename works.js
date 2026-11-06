@@ -21,12 +21,12 @@
 
    주의: 크레딧은 실제로 확인된 것만 넣는다. 공개해도 되는 이름인지 확인할 것. */
 window.IDDOT_WORKS = {
-  'sdf-bky-teaser': {
-    title: '〈스트릿 월드 파이터 : 디렉터스 워〉 파이널 미션 치어 퍼포먼스 티저',
-    artist: '백구영',
-    category: 'M/V · Performance Teaser',
-    cats: ['mv'], selected: true, preview: 'assets/street-world-fighter-bky-preview.mp4',
-    youtube: 'IkycozfF8J8',
+  'sdf-onward-super-kids': {
+    title: '[STREET WORLD FIGHTER : DIRECTORS’ WAR - SUPER KIDS] "ONWARD"',
+    artist: '백구영 & 베이비주 & 캐스퍼',
+    category: 'M/V · Performance Video',
+    cats: ['mv'], selected: true,
+    youtube: '5cKGtDHWPRY',
     client: '',
     role: '',
     credits: [
@@ -79,6 +79,38 @@ window.IDDOT_WORKS = {
     ],
     note: ''
   },
+  'sdf-bky-teaser': {
+    title: '〈스트릿 월드 파이터 : 디렉터스 워〉 파이널 미션 치어 퍼포먼스 티저',
+    artist: '백구영',
+    category: 'M/V · Performance Teaser',
+    cats: ['mv'], selected: true, preview: 'assets/street-world-fighter-bky-preview.mp4',
+    youtube: 'IkycozfF8J8',
+    client: '',
+    role: '',
+    credits: [
+      ["Directed by", "SEUNGMIN YIM x KOOYOUNG BACK"],
+      ["Producer", "YUNJUNG KIM, JIYEON HONG"],
+      ["1st AD", "MISEONG KIM"],
+      ["2nd AD", "TYLER"],
+      ["PA", "MINGYU PARK, YONGBAE KIM"],
+      ["DOP", "GWANYEOL YOO"],
+      ["1st AC", "HYUNJI KIM"],
+      ["2nd AC", "YUNTAE GO"],
+      ["3rd AC", "TAEMIN WOO"],
+      ["Gaffer", "JAEYOUNG HAN"],
+      ["Best Boy", "DOOHYUN HAN"],
+      ["2nd", "JIN NAMGOONG"],
+      ["3rd", "DONGYEON KIM, SUNGHYUN JOO"],
+      ["Art Director", "MINGEE KIM"],
+      ["Art Team", "NAYOUNG KIM, JISU CHOI, WOOHYEON LEE"],
+      ["Set Builder", "DABIN CHEON, JONGWOOK PARK"],
+      ["Edited by", "SEUNGMIN YIM"],
+      ["DI", "MINJAE KIM (SQUARE COLOR)"],
+      ["AI VFX", "HYEONSEONG LEE"],
+      ["Sound Mixer", "JUNHYEONG JEON"]
+    ],
+    note: ''
+  },
   'keyvitup-best-one': {
     title: 'KEYVITUP ‘BEST ONE’ Performance Video',
     artist: 'KEYVITUP (키빗업)',
@@ -96,7 +128,7 @@ window.IDDOT_WORKS = {
     artist: 'HUI',
     category: 'M/V · Fan Concert VCR',
     cats: ['mv'], selected: true, poster: 'assets/hui-fan-concert-vcr.jpg', preview: 'assets/hui-fan-concert-vcr-preview.mp4',
-    video: 'assets/hui-fan-concert-vcr-preview.mp4',
+    video: 'assets/hui-fan-concert-vcr-full.mp4',
     client: '',
     role: '',
     credits: [],
@@ -141,7 +173,7 @@ window.IDDOT_WORKS = {
     artist: '',
     category: 'FILM',
     cats: ['film'], selected: true, poster: 'assets/borderless.jpg', preview: 'assets/borderless-preview.mp4',
-    video: 'assets/borderless-preview.mp4',
+    video: 'assets/borderless-full.mp4',
     client: '',
     role: 'Director / Editor',
     credits: [],
