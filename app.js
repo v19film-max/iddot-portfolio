@@ -216,6 +216,13 @@
     var p = document.createElement('p');
     p.className = 'work-sub';
     p.textContent = cardSub(w);
+    if (w.role) {
+      // 대표가 맡은 직책을 제목 위에 굵게
+      var r = document.createElement('p');
+      r.className = 'work-role';
+      r.textContent = w.role;
+      meta.appendChild(r);
+    }
     meta.appendChild(h); meta.appendChild(p);
 
     a.appendChild(media); a.appendChild(meta);

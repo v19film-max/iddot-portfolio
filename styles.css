@@ -693,3 +693,9 @@ body::after{content:'';position:fixed;inset:-50%;z-index:400;pointer-events:none
 .wd__credits dd{color:var(--sub);word-break:keep-all;}
 .wd__credits{grid-template-columns:minmax(72px,34%) minmax(0,1fr);}
 .wd__credits dt:not(.wd__sec){line-height:1.45;}
+
+/* 카드: 대표가 맡은 직책(제목 위, 굵게) */
+.work-role{margin:0 0 6px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);line-height:1.4;}
+@media (max-width:700px){.work-role{font-size:10px;margin-bottom:4px;}}
+.wd__credits dt + dd:first-of-type{}
+.wd__credits dd.is-role{color:var(--fg);font-weight:800;letter-spacing:.06em;}

@@ -28,7 +28,7 @@ window.IDDOT_WORKS = {
     cats: ['mv'], selected: true,
     youtube: '5cKGtDHWPRY',
     client: '',
-    role: '',
+    role: '1ST AD / CREATIVE TEAM',
     credits: [
       ["STREET WORLD FIGHTER : DIRECTORS’ WAR - SUPER KIDS"],
       ["Production", "RIGEND CREATIVE"],
@@ -86,7 +86,7 @@ window.IDDOT_WORKS = {
     cats: ['mv'], selected: true, preview: 'assets/street-world-fighter-bky-preview.mp4',
     youtube: 'IkycozfF8J8',
     client: '',
-    role: '',
+    role: 'DIRECTOR / EDIT',
     credits: [
       ["Directed by", "SEUNGMIN YIM x KOOYOUNG BACK"],
       ["Producer", "YUNJUNG KIM, JIYEON HONG"],
@@ -119,7 +119,7 @@ window.IDDOT_WORKS = {
     youtube: 'FGZ21g7rsNc',
     embed: false,   // 사이트 안 재생이 막힌 영상 → 미리보기 + 'YouTube에서 보기' 버튼
     client: '',
-    role: '',
+    role: 'PRODUCER / EDIT',
     credits: [],
     note: ''
   },
@@ -130,7 +130,7 @@ window.IDDOT_WORKS = {
     cats: ['mv'], selected: true, poster: 'assets/hui-fan-concert-vcr.jpg', preview: 'assets/hui-fan-concert-vcr-preview.mp4',
     video: 'assets/hui-fan-concert-vcr-full.mp4',
     client: '',
-    role: '',
+    role: 'DIRECTOR / EDIT',
     credits: [],
     note: ''
   },
@@ -141,7 +141,7 @@ window.IDDOT_WORKS = {
     cats: ['mv'], selected: true, preview: 'assets/limhyunsik-the-answer-preview.mp4',
     youtube: 'Mk1ECAg_1yk',
     client: '',
-    role: '',
+    role: 'EDIT',
     credits: [],
     note: ''
   },
@@ -152,7 +152,7 @@ window.IDDOT_WORKS = {
     cats: ['mv'], selected: true,
     youtube: 'J-mE0MhouOI',
     client: '',
-    role: '',
+    role: 'EDIT',
     credits: [],
     note: ''
   },
@@ -164,7 +164,7 @@ window.IDDOT_WORKS = {
     youtube: 'gEcWhvyMhKI',
     embed: false,   // 사이트 안 재생이 막힌 영상 → 미리보기 + 'YouTube에서 보기' 버튼
     client: '',
-    role: '',
+    role: 'DIRECTOR / EDIT',
     credits: [],
     note: ''
   },
@@ -175,7 +175,7 @@ window.IDDOT_WORKS = {
     cats: ['film'], selected: true, poster: 'assets/borderless.jpg', preview: 'assets/borderless-preview.mp4',
     video: 'assets/borderless-full.mp4',
     client: '',
-    role: 'Director / Editor',
+    role: 'DIRECTOR / EDIT',
     credits: [],
     note: ''
   },
@@ -186,7 +186,7 @@ window.IDDOT_WORKS = {
     cats: ['art'], selected: true,
     youtube: 'NIL4fZ_6Rtg',
     client: '',
-    role: 'Set Design',
+    role: 'SET DESIGN',
     credits: [],
     note: ''
   }

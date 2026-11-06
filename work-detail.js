@@ -278,6 +278,7 @@
     elCred.innerHTML = '';
     addRow('Client', w.client);
     addRow('Role', w.role);
+    if (w.role && elCred.lastChild) elCred.lastChild.classList.add('is-role');
     (w.credits || []).forEach(function (c) { if (!c || !c[0]) return; if (c.length === 1) addSection(c[0]); else if (c[1]) addRow(c[0], c[1]); });
     if (!elCred.children.length && IS_LOCAL) {
       // 로컬 미리보기에서만 보이는 안내. 실제 사이트에서는 빈 줄을 그냥 숨긴다.
