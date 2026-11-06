@@ -41,6 +41,7 @@
           '<p class="wd__cat"></p>' +
           '<h2 class="wd__title" id="wdTitle"></h2>' +
           '<p class="wd__artist"></p>' +
+          '<p class="wd__role"><span class="wd__role-k">My Role</span><span class="wd__role-v"></span></p>' +
           '<dl class="wd__credits"></dl>' +
           '<p class="wd__note"></p>' +
           '<a class="wd__yt" target="_blank" rel="noopener noreferrer">YouTube에서 보기<span aria-hidden="true"> ↗</span></a>' +
@@ -65,6 +66,7 @@
   var elTitle  = root.querySelector('.wd__title');
   var elArtist = root.querySelector('.wd__artist');
   var elCred   = root.querySelector('.wd__credits');
+  var elRole   = root.querySelector('.wd__role');
   var elNote   = root.querySelector('.wd__note');
   var elYt     = root.querySelector('.wd__yt');
   var btnPrev  = root.querySelector('.wd__step--prev');
@@ -277,8 +279,8 @@
 
     elCred.innerHTML = '';
     addRow('Client', w.client);
-    addRow('Role', w.role);
-    if (w.role && elCred.lastChild) elCred.lastChild.classList.add('is-role');
+    elRole.querySelector('.wd__role-v').textContent = w.role || '';
+    elRole.hidden = !w.role;
     (w.credits || []).forEach(function (c) { if (!c || !c[0]) return; if (c.length === 1) addSection(c[0]); else if (c[1]) addRow(c[0], c[1]); });
     if (!elCred.children.length && IS_LOCAL) {
       // 로컬 미리보기에서만 보이는 안내. 실제 사이트에서는 빈 줄을 그냥 숨긴다.

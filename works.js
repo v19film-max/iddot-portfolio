@@ -117,7 +117,6 @@ window.IDDOT_WORKS = {
     category: 'M/V · Performance Video',
     cats: ['mv'], selected: true, preview: 'assets/keyvitup-best-one-preview.mp4',
     youtube: 'FGZ21g7rsNc',
-    embed: false,   // 사이트 안 재생이 막힌 영상 → 미리보기 + 'YouTube에서 보기' 버튼
     client: '',
     role: 'PRODUCER / EDIT',
     credits: [],
@@ -162,7 +161,6 @@ window.IDDOT_WORKS = {
     category: 'M/V · Dance Film',
     cats: ['mv'], selected: true, preview: 'assets/victor-preview.mp4',
     youtube: 'gEcWhvyMhKI',
-    embed: false,   // 사이트 안 재생이 막힌 영상 → 미리보기 + 'YouTube에서 보기' 버튼
     client: '',
     role: 'DIRECTOR / EDIT',
     credits: [],

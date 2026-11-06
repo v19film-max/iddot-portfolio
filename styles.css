@@ -699,3 +699,16 @@ body::after{content:'';position:fixed;inset:-50%;z-index:400;pointer-events:none
 @media (max-width:700px){.work-role{font-size:10px;margin-bottom:4px;}}
 .wd__credits dt + dd:first-of-type{}
 .wd__credits dd.is-role{color:var(--fg);font-weight:800;letter-spacing:.06em;}
+
+/* 카드 직책: 제목 아래 */
+.work-role{margin:8px 0 0;}
+/* 상세 창: 전체 크레딧 위에 내 롤 */
+.wd__role{display:flex;align-items:baseline;gap:14px;margin:clamp(22px,2.6vw,34px) 0 0;padding:14px 0 0;border-top:1px solid var(--line);}
+.wd__role[hidden]{display:none;}
+.wd__role-k{color:var(--mute);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+.wd__role-v{color:var(--fg);font-size:15px;font-weight:800;letter-spacing:.06em;}
+.wd__role + .wd__credits{margin-top:14px;}
+/* 쇼릴 진행 막대: 눌러서 장면 이동 */
+.hero__steps{cursor:pointer;padding:12px 0;margin-bottom:-12px;z-index:2;}
+.hero__steps span{transition:width var(--t-pop) var(--ease),background var(--t-micro) var(--ease);}
+.hero__steps:hover span:not(.is-on){background:rgba(242,241,239,.42);}
