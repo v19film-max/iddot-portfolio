@@ -150,7 +150,7 @@ window.IDDOT_WORKS = {
     title: 'HUI Fan Concert VCR',
     artist: 'HUI',
     category: 'M/V · Fan Concert VCR',
-    cats: ['mv'], selected: true, poster: 'assets/hui-fan-concert-vcr.jpg', preview: 'assets/hui-fan-concert-vcr-preview.mp4',
+    cats: ['mv'], selected: true, poster: 'assets/hui-fan-concert-vcr.jpg?v=2', preview: 'assets/hui-fan-concert-vcr-preview.mp4',
     video: 'assets/hui-fan-concert-vcr-full.mp4',
     client: '',
     role: 'DIRECTOR / EDIT',
